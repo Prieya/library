@@ -20,14 +20,14 @@ public class Main {
         String bookISBN= k.nextLine();
         System.out.println("Enter a brief discription of the Book, if none enter 'N/A'");
         String bookdiscription= k.nextLine();
+        System.out.println("Enter the author name of the Book");
+        String bookauthor = k.nextLine();
+        System.out.println("Enter the book genre.");
+        String bookGenre= k.nextLine();
         System.out.println("Enter the total amount of page in the Book");
         int bookpages= k.nextInt();
-        System.out.println("Enter the total amount of chapterin the Book");
+        System.out.println("Enter the total amount of chapter in the Book");
         int bookchapter= k.nextInt();
-        System.out.println("Enter the author name of the Book");
-        String bookauthor = k.next();
-        System.out.println("Enter the book genre.");
-        String bookGenre= k.next();
 
         author = new Author();
         author.addAuthor(bookauthor);

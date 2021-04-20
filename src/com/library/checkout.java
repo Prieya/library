@@ -24,7 +24,7 @@ public class checkout {
     public void adding_checkout(int bookId, int userId){
         try{
             connect = tryConnect();
-            statement = connect.prepareStatement("INSERT INTO checkout VALUE(?, ?)");
+            statement = connect.prepareStatement("INSERT INTO checkout(book_id, user_id) VALUES(?, ?)");
             statement.setInt(1, bookId);
             statement.setInt(2, userId);
             statement.executeQuery();

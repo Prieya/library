@@ -19,14 +19,14 @@ public class Books {
     }
 
     public void addBook(String title, String isbn, String description, int pages, int chapters, int author_id){
-        if(!checkBook(isbn, title)) {
+        if(!checkBook(isbn)) {
             System.out.println("The information enter is wrong" +
                     "Check again with 8 number as the ID");
         }
         try{
             conn = Tryconnection();
-            statement = conn.prepareStatement("INSERT INTO book" +
-                    "(title, isbn, description, pages, chapters, author_id) VALUES (?, ?, ?, ?)");
+            statement = conn.prepareStatement("INSERT INTO book(title, isbn, description, pages, chapters, author_id)" +
+                     "VALUES (?, ?, ?, ?)");
             statement.setString(1, title);
             statement.setString(2, isbn);
             statement.setString(3, description);
@@ -41,27 +41,7 @@ public class Books {
         }
     }
 
-    public void addBook(String title, String isbn, int pages, int chapters, int author_id){
-        if(!checkBook(isbn, title)) {
-            System.out.println("The information enter is wrong" +
-                    "Check again with 8 number as the ID");
-        }
-        try{
-            conn = Tryconnection();
-            statement = conn.prepareStatement("INSERT INTO book" +
-                    "(title, isbn, pages, chapters, author_id) VALUES (?, ?, ?, ?)");
-            statement.setString(1, title);
-            statement.setString(2, isbn);
-            statement.setInt(3, pages);
-            statement.setInt(4, chapters);
-            statement.setInt(5, author_id);
-            statement.executeUpdate();
-            statement.close();
-            conn.close();
-        }catch (SQLException e){
-            System.out.println("Error adding to Book" + e);
-        }
-    }
+
 
     /*    public void updateBook(String id, String Updatecheckout){
             try{
@@ -80,7 +60,7 @@ public class Books {
         try{
             if(BookExist(id, title)) {
                 conn = Tryconnection();
-                statement = conn.prepareStatement("DELETE FROM books WHERE idbn = ? AND title = ?");
+                statement = conn.prepareStatement("DELETE FROM book WHERE idbn = ? AND title = ?");
                 statement.setString(1, id);
                 statement.setString(2, title);
 
@@ -99,7 +79,7 @@ public class Books {
         boolean UserExist = false;
         try{
             conn = Tryconnection();
-            statement = conn.prepareStatement("SELECT * FROM books ");
+            statement = conn.prepareStatement("SELECT * FROM book ");
             result = statement.executeQuery();
             while(result.next()){
                 String Bookid = result.getString("idbn");
@@ -114,20 +94,11 @@ public class Books {
         return UserExist;
     }
 
-    public boolean checkBook(String id, String title){
-        boolean correction = false;
+    public boolean checkBook(String id){
+        boolean correction = true;
         for(int i = 0; i < id.length(); i++){
-            if(id.charAt(i) >= '0' && id.charAt(i) <= '9'){
-                correction = true;
-            }else{
-                correction = false;
-            }
-        }
-        for(int i = 0; i < title.length(); i++){
-            if((title.charAt(i) >= 'A' && id.charAt(i) <= 'Z') || (title.charAt(i) >= 'a' && id.charAt(i) <= 'z')){
-                correction = true;
-            }else{
-                correction = false;
+            if(!(id.charAt(i) >= '0' && id.charAt(i) <= '9')){
+                return false;
             }
         }
 
@@ -140,7 +111,7 @@ public class Books {
         int BookId = 0;
         try{
             conn = Tryconnection();
-            statement = conn.prepareStatement("SELECT * FROM books ");
+            statement = conn.prepareStatement("SELECT * FROM book ");
             result = statement.executeQuery();
             while(result.next()){
                  Bookidbn = result.getString("idbn");
@@ -161,7 +132,7 @@ public class Books {
         int BookAuthorId = 0;
         try{
             conn = Tryconnection();
-            statement = conn.prepareStatement("SELECT * FROM books ");
+            statement = conn.prepareStatement("SELECT * FROM book ");
             result = statement.executeQuery();
             while(result.next()){
                 Bookidbn = result.getString("idbn");

@@ -20,7 +20,7 @@ public class users {
     public void user_adding(String email, String name, String password){
         try{
             con = connect();
-            statement = con.prepareStatement("INSERT INTO users VALUES(?, ?, ?)");
+            statement = con.prepareStatement("INSERT INTO users(email, name, password) VALUES(?, ?, ?)");
             statement.setString(1, email);
             statement.setString(2, name);
             statement.setString(3, password);

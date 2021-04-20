@@ -9,7 +9,7 @@ public class Author {
 
     public Connection TryConnection() throws ClassNotFoundException {
         Class.forName("org.postgresql.Driver");
-        final String url = "jdbc:postgresql:library";
+        final String url = "jdbc:postgresql://localhost:5432/library";
         try{
             conn = DriverManager.getConnection(url);
             System.out.println("Connection to author is success");
@@ -22,8 +22,8 @@ public class Author {
     public void addAuthor(String name){
         try{
             conn = TryConnection();
-            statement = conn.prepareStatement("INSERT INTO author" +
-                    "(name) VALUE(?)");
+            statement = conn.prepareStatement("INSERT INTO author(name)" +
+                    "VALUES(?)");
             statement.setString(1, name);
             statement.executeUpdate();
             statement.close();
@@ -94,6 +94,7 @@ public class Author {
                 }
             }
         }catch(Exception e){
+            System.out.println("Error getting ID from author");
         }
         return AuthorID;
     }

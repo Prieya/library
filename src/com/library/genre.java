@@ -21,7 +21,7 @@ public class genre {
     public void AddGenre(String name){
         try{
             connec = tryConnect();
-            statement = connec.prepareStatement("INSERT INTO genre name VALUE(?)");
+            statement = connec.prepareStatement("INSERT INTO genre(name) VALUES(?)");
             statement.setString(1, name);
             statement.executeUpdate();
             connec.close();

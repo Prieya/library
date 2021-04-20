@@ -24,7 +24,7 @@ public class book_genre {
     public void Book_Genre(int BId, int GId){
         try{
             connec = tryConnect();
-            statement = connec.prepareStatement("INSERT INTO book_genre VALUE(?, ?)");
+            statement = connec.prepareStatement("INSERT INTO book_genre(book_id, genre_id), VALUES(?, ?)");
             statement.setInt(1, BId);
             statement.setInt(2, GId);
             statement.executeUpdate();
