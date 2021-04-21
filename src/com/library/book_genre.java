@@ -6,25 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class book_genre {
+    private TryConnect g = new TryConnect();
     private Connection connec = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
 
-    public Connection tryConnect(){
-        final String url = "jdbc:postgresql://localhost:5432/library";
-        try{
-            connec = DriverManager.getConnection(url);
-            System.out.println("Connection to genre was sucess");
-        }catch( Exception e){
-            System.out.println("Error connecting to book_genre " + e);
-        }
-        return connec;
-    }
 
     public void Book_Genre(int BId, int GId){
         try{
-            connec = tryConnect();
-            statement = connec.prepareStatement("INSERT INTO book_genre(book_id, genre_id), VALUES(?, ?)");
+            connec = g.Tryconnection();
+            statement = connec.prepareStatement("INSERT INTO book_genre(book_id, genre_id) VALUES(?, ?)");
             statement.setInt(1, BId);
             statement.setInt(2, GId);
             statement.executeUpdate();
@@ -38,7 +29,7 @@ public class book_genre {
     public void UpdateBookGenre(int id, int BId, int GId){
         boolean Genre_exist = false;
         try{
-            connec = tryConnect();
+            connec = g.Tryconnection();
             statement = connec.prepareStatement("SELECT * FROM book_genre");
             result = statement.executeQuery();
             while(result.next()){
@@ -66,7 +57,7 @@ public class book_genre {
     public void DeleteBookGenre( int BId, int GId){
         boolean Genre_Exist = false;
         try{
-            connec = tryConnect();
+            connec = g.Tryconnection();
             statement = connec.prepareStatement("SELECT * FROM book_genre");
             result = statement.executeQuery();
             while(result.next()){
@@ -95,7 +86,7 @@ public class book_genre {
     public void DeleteBookGenre( int BId){
         boolean Genre_Exist = false;
         try{
-            connec = tryConnect();
+            connec = g.Tryconnection();
             statement = connec.prepareStatement("SELECT * FROM book_genre");
             result = statement.executeQuery();
             while(result.next()){

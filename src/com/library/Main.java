@@ -26,8 +26,6 @@ public class Main {
         String bookGenre= k.nextLine();
         System.out.println("Enter the total amount of page in the Book");
         int bookpages= k.nextInt();
-        System.out.println("Enter the total amount of chapter in the Book");
-        int bookchapter= k.nextInt();
 
         author = new Author();
         author.addAuthor(bookauthor);
@@ -36,7 +34,7 @@ public class Main {
         g.AddGenre(bookGenre);
 
         book = new Books();
-        book.addBook(bookTitle, bookISBN, bookdiscription, bookpages, bookchapter, author.getauthorID(bookauthor));
+        book.addBook(bookTitle, bookISBN, bookdiscription, bookpages, author.getauthorID(bookauthor));
 
         b = new book_genre();
         b.Book_Genre(book.getBookID(bookTitle, bookISBN), g.getGenreID(bookGenre));

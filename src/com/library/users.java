@@ -3,23 +3,15 @@ package com.library;
 import java.sql.*;
 
 public class users {
+    private TryConnect u = new TryConnect();
     private Connection con = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
 
-    public Connection connect(){
-        final String url = "jdbc:postgresql:library";
-        try{
-            con = DriverManager.getConnection(url);
-            System.out.println("connection was sucess");
-        }catch(Exception e){
-            System.out.println("error connecting to users");
-        }
-        return con;
-    }
+
     public void user_adding(String email, String name, String password){
         try{
-            con = connect();
+            con = u.Tryconnection();
             statement = con.prepareStatement("INSERT INTO users(email, name, password) VALUES(?, ?, ?)");
             statement.setString(1, email);
             statement.setString(2, name);
@@ -35,7 +27,7 @@ public class users {
     public void delete_user(String name, String email) {
         boolean Exist = false;
         try {
-            con = connect();
+            con = u.Tryconnection();
             statement = con.prepareStatement("Select * FROM users");
             result = statement.executeQuery();
             while (result.next()) {
@@ -64,7 +56,7 @@ public class users {
     public void Update_user(String name, String email, String password) {
         boolean Exist = false;
         try {
-            con = connect();
+            con = u.Tryconnection();
             statement = con.prepareStatement("Select * FROM users");
             result = statement.executeQuery();
             while (result.next()) {
@@ -95,7 +87,7 @@ public class users {
         String Upassword = "";
         int id = 0;
         try {
-            con = connect();
+            con = u.Tryconnection();
             statement = con.prepareStatement("Select * FROM users");
             result = statement.executeQuery();
             while (result.next()) {

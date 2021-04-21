@@ -6,24 +6,16 @@ import java.sql.ResultSet;
 import java.sql.Connection;
 
 public class checkout {
+    private TryConnect C = new TryConnect();
     private Connection connect = null;
     private PreparedStatement statement = null;
     private ResultSet set = null;
 
-    public Connection tryConnect(){
-        final String url = "jdbc:postgresql://localhost:5432/library";
-        try{
-            connect = DriverManager.getConnection(url);
-            System.out.println("Connecting on checkout");
-        }catch(Exception e){
-            System.out.println("Error connecting on checkout");
-        }
-        return connect;
-    }
+
 
     public void adding_checkout(int bookId, int userId){
         try{
-            connect = tryConnect();
+            connect = C.Tryconnection();
             statement = connect.prepareStatement("INSERT INTO checkout(book_id, user_id) VALUES(?, ?)");
             statement.setInt(1, bookId);
             statement.setInt(2, userId);
@@ -38,7 +30,7 @@ public class checkout {
     public void Delete_checkoutBook(int BId){
         boolean check = false;
         try{
-            connect = tryConnect();
+            connect = C.Tryconnection();
             statement = connect.prepareStatement("SELECT * FROM checkout");
             set = statement.executeQuery();
             while(set.next()){
@@ -64,8 +56,8 @@ public class checkout {
     public void Delete_checkoutUser(int UId){
         boolean check = false;
         try{
-            connect = tryConnect();
-            statement = connect.prepareStatement("SELECT * FROM checkout");
+            connect = C.Tryconnection();
+            statement = connect.prepareStatement("SELECT * FROM checkout WHERE id = ?");
             set = statement.executeQuery();
             while(set.next()){
                 int id = set.getInt("user_id");
@@ -91,7 +83,7 @@ public class checkout {
     public void Update_checkout(int Id, int bookID, int userId){
         boolean check = false;
         try{
-            connect = tryConnect();
+            connect = C.Tryconnection();
             statement = connect.prepareStatement("SELECT * FROM checkout");
             set = statement.executeQuery();
             while(set.next()){

@@ -3,25 +3,14 @@ package com.library;
 import java.sql.*;
 
 public class Author {
+    private TryConnect c = new TryConnect();
     private Connection conn = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
 
-    public Connection TryConnection() throws ClassNotFoundException {
-        Class.forName("org.postgresql.Driver");
-        final String url = "jdbc:postgresql://localhost:5432/library";
-        try{
-            conn = DriverManager.getConnection(url);
-            System.out.println("Connection to author is success");
-        }catch(SQLException e){
-            System.out.println("Connection error " + e.getMessage());
-        }
-        return conn;
-    }
-
     public void addAuthor(String name){
         try{
-            conn = TryConnection();
+            conn = c.Tryconnection();
             statement = conn.prepareStatement("INSERT INTO author(name)" +
                     "VALUES(?)");
             statement.setString(1, name);
@@ -35,7 +24,7 @@ public class Author {
 
     public void UpdateAuthor(int id, String name){
         try{
-            conn = TryConnection();
+            conn = c.Tryconnection();
             statement = conn.prepareStatement("UPDATE author set name ? WHERE id = ? ");
             statement.setString(1, name);
             statement.setInt(2, id);
@@ -50,7 +39,7 @@ public class Author {
     public void deleteAuthor(String name){
         if(authorExist(name)) {
             try {
-                conn = TryConnection();
+                conn = c.Tryconnection();
                 statement = conn.prepareStatement("DELETE FROM author WHERE name =?");
                 statement.setString(1, name);
                 statement.executeUpdate();
@@ -66,7 +55,7 @@ public class Author {
     public boolean authorExist(String name){
         boolean exist = false;
         try{
-            conn = TryConnection();
+            conn = c.Tryconnection();
             statement = conn.prepareStatement("SELECT * FROM author");
             result = statement.executeQuery();
             while(result.next()){
@@ -84,7 +73,7 @@ public class Author {
         String Aname = "";
         int AuthorID  = 0;
         try{
-            conn = TryConnection();
+            conn = c.Tryconnection();
             statement = conn.prepareStatement("SELECT * FROM author");
             result = statement.executeQuery();
             while(result.next()){
@@ -103,7 +92,7 @@ public class Author {
         int Aid = 0;
         String Authorname = "";
         try{
-            conn = TryConnection();
+            conn = c.Tryconnection();
             statement = conn.prepareStatement("SELECT * FROM author");
             result = statement.executeQuery();
             while(result.next()){

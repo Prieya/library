@@ -3,24 +3,15 @@ package com.library;
 import java.sql.*;
 
 public class genre {
+    private TryConnect G = new TryConnect();
     private Connection connec = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
 
-    public Connection tryConnect(){
-        final String url = "jdbc:postgresql://localhost:5432/library";
-        try{
-            connec = DriverManager.getConnection(url);
-            System.out.println("Connection to genre was sucess");
-        }catch( Exception e){
-            System.out.println("Error connecting to genre " + e);
-        }
-        return connec;
-    }
 
     public void AddGenre(String name){
         try{
-            connec = tryConnect();
+            connec = G.Tryconnection();
             statement = connec.prepareStatement("INSERT INTO genre(name) VALUES(?)");
             statement.setString(1, name);
             statement.executeUpdate();
@@ -34,7 +25,7 @@ public class genre {
     public void UpdateGenre(int id, String name){
         boolean Genre_exist = false;
         try{
-            connec = tryConnect();
+            connec = G.Tryconnection();
             statement = connec.prepareStatement("SELECT * FROM genre");
             result = statement.executeQuery();
             while(result.next()){
@@ -61,7 +52,7 @@ public class genre {
     public void DeleteGenre(String name){
         boolean Genre_Exist = false;
         try{
-            connec = tryConnect();
+            connec = G.Tryconnection();
             statement = connec.prepareStatement("SELECT * FROM genre");
             result = statement.executeQuery();
             while(result.next()){
@@ -90,7 +81,7 @@ public class genre {
         String Gname = "";
         int GID = 0;
         try {
-            connec = tryConnect();
+            connec = G.Tryconnection();
             statement = connec.prepareStatement("SELECT * FROM genre");
             result = statement.executeQuery();
             while (result.next()) {
