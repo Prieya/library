@@ -1,9 +1,12 @@
 package com.library;
 
+import com.library.Helper_Method.DoesExist;
+
 import java.sql.*;
 
 public class Author {
     private TryConnect c = new TryConnect();
+    private DoesExist exist = new DoesExist();
     private Connection conn = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
@@ -23,25 +26,29 @@ public class Author {
     }
 
     public void UpdateAuthor(int id, String name){
-        try{
-            conn = c.Tryconnection();
-            statement = conn.prepareStatement("UPDATE author set name ? WHERE id = ? ");
-            statement.setString(1, name);
-            statement.setInt(2, id);
-            statement.executeUpdate();
-            statement.close();
-            conn.close();
-        }catch(Exception e){
-            System.out.println("Error updating author");
+        if(exist.Exist("author", id)) {
+            try {
+                conn = c.Tryconnection();
+                statement = conn.prepareStatement("UPDATE author set name ? WHERE id = ? ");
+                statement.setString(1, name);
+                statement.setInt(2, id);
+                statement.executeUpdate();
+                statement.close();
+                conn.close();
+            } catch (Exception e) {
+                System.out.println("Error updating author");
+            }
+        }else{
+            System.out.println("id does not exist  in author");
         }
     }
 
-    public void deleteAuthor(String name){
-        if(authorExist(name)) {
+    public void deleteAuthor(int id){
+        if(exist.Exist("author", id)) {
             try {
                 conn = c.Tryconnection();
-                statement = conn.prepareStatement("DELETE FROM author WHERE name =?");
-                statement.setString(1, name);
+                statement = conn.prepareStatement("DELETE FROM author WHERE id =?");
+                statement.setInt(1, id);
                 statement.executeUpdate();
                 statement.close();
                 conn.close();
@@ -51,22 +58,6 @@ public class Author {
         }else{
             System.out.println("Author does not exist");
         }
-    }
-    public boolean authorExist(String name){
-        boolean exist = false;
-        try{
-            conn = c.Tryconnection();
-            statement = conn.prepareStatement("SELECT * FROM author");
-            result = statement.executeQuery();
-            while(result.next()){
-                String Aname = result.getString("name");
-                if(name.equalsIgnoreCase(Aname)){
-                    exist = true;
-                }
-            }
-        }catch(Exception e){
-        }
-        return exist;
     }
 
     public int getauthorID(String name){

@@ -1,5 +1,7 @@
 package com.library;
 
+import com.library.Helper_Method.DoesExist;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +9,7 @@ import java.sql.ResultSet;
 
 public class book_genre {
     private TryConnect g = new TryConnect();
+    private DoesExist exist = new DoesExist();
     private Connection connec = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
@@ -27,18 +30,8 @@ public class book_genre {
 
     }
     public void UpdateBookGenre(int id, int BId, int GId){
-        boolean Genre_exist = false;
-        try{
-            connec = g.Tryconnection();
-            statement = connec.prepareStatement("SELECT * FROM book_genre");
-            result = statement.executeQuery();
-            while(result.next()){
-                int BGid = result.getInt("id");
-                if(BGid == id){
-                    Genre_exist = true;
-                }
-            }
-            if(Genre_exist) {
+        if(exist.Exist("book_genre", id)) {
+            try {
                 statement = connec.prepareStatement("UPDATE book_genre SET book_id = ? AND genre_id = ? WHERE id = ?");
                 statement.setInt(1, BId);
                 statement.setInt(2, GId);
@@ -46,68 +39,32 @@ public class book_genre {
                 statement.executeUpdate();
                 connec.close();
                 statement.close();
+            }catch(Exception e){
+                System.out.println("Error Updating to Book_genre " + e);
+            }
             }else{
                 System.out.println("The id wasn't found for the Book_Genre");
             }
-        }catch(Exception e){
-            System.out.println("Error Updating to Book_genre " + e);
-        }
+
     }
 
-    public void DeleteBookGenre( int BId, int GId){
-        boolean Genre_Exist = false;
-        try{
-            connec = g.Tryconnection();
-            statement = connec.prepareStatement("SELECT * FROM book_genre");
-            result = statement.executeQuery();
-            while(result.next()){
-                int BID = result.getInt("book_id");
-                int GID = result.getInt("genre_id");
-                if(BID == BId && GID == GId){
-                    Genre_Exist = true;
-                }
-            }
-            statement.close();
-            if(Genre_Exist){
-                statement = connec.prepareStatement("DELETE FROM book_genre WHERE BID = ? AND GID = ?");
-                statement.setInt(1,BId);
-                statement.setInt(2,GId);
+    public void DeleteBookGenre( int id){
+        if(exist.Exist("book_genre", id)) {
+            try {
+                statement = connec.prepareStatement("DELETE FROM book_genre WHERE id = ?");
+                statement.setInt(1,id);
                 statement.executeUpdate();
                 statement.close();
                 connec.close();
+            }catch(Exception e){
+                System.out.println("Error Deleting from book_genre");
+            }
             }else{
                 System.out.println("The Book id or Genre id can not be found in book_genre");
             }
-        }catch(Exception e){
-            System.out.println("Error Deleting from book_genre");
-        }
+
     }
 
-    public void DeleteBookGenre( int BId){
-        boolean Genre_Exist = false;
-        try{
-            connec = g.Tryconnection();
-            statement = connec.prepareStatement("SELECT * FROM book_genre");
-            result = statement.executeQuery();
-            while(result.next()){
-                int BID = result.getInt("book_id");
-                if(BID == BId){
-                    Genre_Exist = true;
-                }
-            }
-            statement.close();
-            if(Genre_Exist){
-                statement = connec.prepareStatement("DELETE FROM book_genre WHERE BID = ?");
-                statement.setInt(1,BId);
-                statement.executeUpdate();
-                statement.close();
-                connec.close();
-            }else{
-                System.out.println("The Book id can not be found in book_genre");
-            }
-        }catch(Exception e){
-            System.out.println("Error Deleting from book_genre");
-        }
-    }
+
 
 }

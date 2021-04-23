@@ -1,7 +1,10 @@
 package com.library;
+import com.library.Helper_Method.DoesExist;
+
 import java.sql.*;
 
 public class Books {
+    private DoesExist e = new DoesExist();
     private TryConnect b = new TryConnect();
     private Connection conn;
     private PreparedStatement statement;
@@ -45,14 +48,12 @@ public class Books {
             }
 
         }*/
-    public void deleteBook(String id, String title){
+    public void deleteBook(int id){
         try{
-            if(BookExist(id, title)) {
+            if(e.Exist("book", id)) {
                 conn = b.Tryconnection();
-                statement = conn.prepareStatement("DELETE FROM book WHERE idbn = ? AND title = ?");
-                statement.setString(1, id);
-                statement.setString(2, title);
-
+                statement = conn.prepareStatement("DELETE FROM book WHERE id = ?");
+                statement.setInt(1, id);
                 statement.executeUpdate();
                 statement.close();
                 conn.close();
@@ -64,24 +65,6 @@ public class Books {
         }
     }
 
-    public boolean BookExist(String idbn, String title){
-        boolean UserExist = false;
-        try{
-            conn = b.Tryconnection();
-            statement = conn.prepareStatement("SELECT * FROM book ");
-            result = statement.executeQuery();
-            while(result.next()){
-                String Bookid = result.getString("idbn");
-                String BookTitle = result.getString("title");
-                if(idbn.equals(Bookid) && title.equalsIgnoreCase(BookTitle)){
-                    UserExist = true;
-                }
-            }
-        }catch(SQLException e){
-            System.out.println("Error finding Book");
-        }
-        return UserExist;
-    }
 
     public boolean checkBook(String id){
         boolean correction = true;
