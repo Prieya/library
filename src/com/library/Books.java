@@ -4,9 +4,9 @@ import com.library.Helper_Method.DoesExist;
 import java.sql.*;
 
 public class Books {
-    private DoesExist e = new DoesExist();
-    private TryConnect b = new TryConnect();
-    private Connection conn;
+    private DoesExist exist = new DoesExist();
+    private TryConnect database = new TryConnect();
+    private Connection connection;
     private PreparedStatement statement;
     private ResultSet result;
 
@@ -17,8 +17,8 @@ public class Books {
                     "Check again with 8 number as the ID");
         }
         try{
-            conn = b.Tryconnection();
-            statement = conn.prepareStatement("INSERT INTO book(title, isbn, description, pages, author_id)" +
+            connection = database.Tryconnection();
+            statement = connection.prepareStatement("INSERT INTO book(title, isbn, description, pages, author_id)" +
                      "VALUES (?, ?, ?, ?, ?)");
             statement.setString(1, title);
             statement.setString(2, isbn);
@@ -26,8 +26,7 @@ public class Books {
             statement.setInt(4, pages);
             statement.setInt(5, author_id);
             statement.executeUpdate();
-            statement.close();
-            conn.close();
+            connection.close();
         }catch (SQLException e){
             System.out.println("Error adding to Book" + e);
         }
@@ -50,13 +49,12 @@ public class Books {
         }*/
     public void deleteBook(int id){
         try{
-            if(e.Exist("book", id)) {
-                conn = b.Tryconnection();
-                statement = conn.prepareStatement("DELETE FROM book WHERE id = ?");
+            if(exist.Exist("book", id)) {
+                connection = database.Tryconnection();
+                statement = connection.prepareStatement("DELETE FROM book WHERE id = ?");
                 statement.setInt(1, id);
                 statement.executeUpdate();
-                statement.close();
-                conn.close();
+                connection.close();
             }else{
                 System.out.println("Cannot delete a Book that does not Exist");
             }
@@ -77,23 +75,16 @@ public class Books {
         return correction;
     }
 
-    public int getBookID(String title, String isbn){
-        String Bookidbn = "";
-        String BookTitle = "";
+    public int getBookID(String title){
         int BookId = 0;
         try{
-            conn = b.Tryconnection();
-            statement = conn.prepareStatement("SELECT * FROM book ");
+            connection = database.Tryconnection();
+            statement = connection.prepareStatement("SELECT * FROM book WHERE title = " + title);
             result = statement.executeQuery();
-            while(result.next()){
-                 BookTitle = result.getString("title");
-                Bookidbn = result.getString("isbn");
-                if(Bookidbn.equals(isbn) && BookTitle.equalsIgnoreCase(title)){
-                    BookId = result.getInt("id");
-                }
-            }
+            BookId = result.getInt("id");
+
         }catch(SQLException e){
-            System.out.println("Error getting book Id");
+            System.out.println("Error getting book Id " + e);
         }
         return BookId;
     }
@@ -103,8 +94,8 @@ public class Books {
         String BookTitle = "";
         int BookAuthorId = 0;
         try{
-            conn = b.Tryconnection();
-            statement = conn.prepareStatement("SELECT * FROM book ");
+            connection = database.Tryconnection();
+            statement = connection.prepareStatement("SELECT * FROM book ");
             result = statement.executeQuery();
             while(result.next()){
                 Bookidbn = result.getString("idbn");

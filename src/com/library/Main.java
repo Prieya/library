@@ -9,7 +9,7 @@ public class Main {
 	Author author = new Author();
 	genre g = new genre();
 	book_genre genre = new book_genre();
-	General_book(book, author,g, genre);
+	generalDeleteBook(book);
     }
 
     public static void General_book(Books book, Author author, genre g, book_genre b){
@@ -34,10 +34,10 @@ public class Main {
         g.AddGenre(bookGenre);
 
         book = new Books();
-        book.addBook(bookTitle, bookISBN, bookdiscription, bookpages, author.getauthorID(bookauthor));
+        book.addBook(bookTitle, bookISBN, bookdiscription, bookpages, author.getauthorByID(bookauthor));
 
         b = new book_genre();
-        b.Book_Genre(book.getBookID(bookTitle, bookISBN), g.getGenreID(bookGenre));
+        b.Book_Genre(book.getBookID(bookTitle), g.getGenrebyID(bookGenre));
     }
 
     public static void generalCheckout(Books book, users u, checkout c){
@@ -57,7 +57,7 @@ public class Main {
         u = new users();
         u.user_adding(useremail, Username, userpassword);
         c = new checkout();
-        c.adding_checkout(book.getBookID(bookTitle, bookISBN), u.getuserID(Username, userpassword));
+        c.adding_checkout(book.getBookID(bookTitle), u.GetUserByID(Username));
     }
 
     public static void MembergeneralCheckout(Books book, users u, checkout c){
@@ -74,18 +74,20 @@ public class Main {
         book = new Books();
         u = new users();
         c = new checkout();
-        c.adding_checkout(book.getBookID(bookTitle, bookISBN), u.getuserID(Username, userpassword));
+        c.adding_checkout(book.getBookID(bookTitle), u.GetUserByID(Username));
     }
 
-    public static void generalDeleteBook(Books book, book_genre b, checkout check){
+    public static void generalDeleteBook(Books book){
         Scanner k = new Scanner(System.in);
         System.out.println("Enter The title of the Book that need to be delete");
         String bookTitle = k.nextLine();
         System.out.println("Enter the ISBN of the Book that need to be delete");
         String bookISBN= k.nextLine();
 
-        int bookId = book.getBookID(bookTitle, bookISBN);
-
+        int bookId = book.getBookID(bookTitle);
+        book.deleteBook(bookId);
+        book_genre b = new book_genre();
+        checkout check = new checkout();
         b.DeleteBookGenre(bookId);
         check.Delete_checkoutBook(bookId);
     }

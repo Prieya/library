@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.util.Comparator;
 
 public class DoesExist {
-    private TryConnect c = new TryConnect();
+    private TryConnect database = new TryConnect();
     private Connection connect = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
@@ -16,7 +16,7 @@ public class DoesExist {
     public boolean Exist(String table, int id ){
         boolean exist = false;
         try{
-            connect = c.Tryconnection();
+            connect = database.Tryconnection();
             statement = connect.prepareStatement("SELECT * FROM " + table +" WHERE id = " + id);
             result = statement.executeQuery();
             if(result.next()){

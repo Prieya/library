@@ -3,20 +3,19 @@ package com.library;
 import java.sql.*;
 
 public class genre {
-    private TryConnect G = new TryConnect();
-    private Connection connec = null;
+    private TryConnect database_connection = new TryConnect();
+    private Connection connect = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
 
 
     public void AddGenre(String name){
         try{
-            connec = G.Tryconnection();
-            statement = connec.prepareStatement("INSERT INTO genre(name) VALUES(?)");
+            connect = database_connection.Tryconnection();
+            statement = connect.prepareStatement("INSERT INTO genre(name) VALUES(?)");
             statement.setString(1, name);
             statement.executeUpdate();
-            connec.close();
-            statement.close();
+            connect.close();
         }catch(Exception e){
             System.out.println("Error add to genre " + e);
         }
@@ -25,22 +24,21 @@ public class genre {
     public void UpdateGenre(int id, String name){
         boolean Genre_exist = false;
         try{
-            connec = G.Tryconnection();
-            statement = connec.prepareStatement("SELECT * FROM genre");
+            connect = database_connection.Tryconnection();
+            statement = connect.prepareStatement("SELECT * FROM genre");
             result = statement.executeQuery();
             while(result.next()){
-                int Gid = result.getInt("id");
-                if(Gid == id){
+                int GenreID = result.getInt("id");
+                if(GenreID == id){
                     Genre_exist = true;
                 }
             }
             if(Genre_exist) {
-                statement = connec.prepareStatement("UPDATE genre SET name = ? WHERE id = ?");
+                statement = connect.prepareStatement("UPDATE genre SET name = ? WHERE id = ?");
                 statement.setString(1, name);
                 statement.setInt(2, id);
                 statement.executeUpdate();
-                connec.close();
-                statement.close();
+                connect.close();
             }else{
                 System.out.println("The id wasn't found for the Genre");
             }
@@ -52,23 +50,22 @@ public class genre {
     public void DeleteGenre(String name){
         boolean Genre_Exist = false;
         try{
-            connec = G.Tryconnection();
-            statement = connec.prepareStatement("SELECT * FROM genre");
+            connect = database_connection.Tryconnection();
+            statement = connect.prepareStatement("SELECT * FROM genre");
             result = statement.executeQuery();
             while(result.next()){
-                String Gname = result.getString("name");
-                if(Gname.equalsIgnoreCase(name)){
+                String Genre_Type = result.getString("name");
+                if(Genre_Type.equalsIgnoreCase(name)){
                     Genre_Exist = true;
                 }
                 statement.close();
                 result.close();
             }
             if(Genre_Exist){
-                statement = connec.prepareStatement("DELETE FROM genre WHERE name = ?");
+                statement = connect.prepareStatement("DELETE FROM genre WHERE name = ?");
                 statement.setString(1,name);
                 statement.executeUpdate();
-                statement.close();
-                connec.close();
+                connect.close();
             }else{
                 System.out.println("That name can not be found in genre");
             }
@@ -77,23 +74,19 @@ public class genre {
         }
     }
 
-    public int getGenreID(String name){
-        String Gname = "";
-        int GID = 0;
+    public int getGenrebyID(String name){
+        String Genre_name = "";
+        int GenreID = 0;
         try {
-            connec = G.Tryconnection();
-            statement = connec.prepareStatement("SELECT * FROM genre");
+            connect = database_connection.Tryconnection();
+            statement = connect.prepareStatement("SELECT * FROM genre WHERE name = " + name);
             result = statement.executeQuery();
-            while (result.next()) {
-                Gname = result.getString("name");
-                if (Gname.equalsIgnoreCase(name)) {
-                    GID = result.getInt("id");
-                }
-            }
-        }catch(Exception e){
+            GenreID = result.getInt("id");
 
+        }catch(Exception e){
+            System.out.println("Eroor in gteGenrebyId: " + e);
         }
-        return GID;
+        return GenreID;
     }
 
 

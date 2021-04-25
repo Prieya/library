@@ -5,22 +5,22 @@ import com.library.Helper_Method.DoesExist;
 import java.sql.*;
 
 public class users {
-    private TryConnect u = new TryConnect();
-    private DoesExist e = new DoesExist();
-    private Connection con = null;
+    private TryConnect database_connection = new TryConnect();
+    private DoesExist exist = new DoesExist();
+    private Connection connect = null;
     private PreparedStatement statement = null;
     private ResultSet result = null;
 
 
     public void user_adding(String email, String name, String password){
         try{
-            con = u.Tryconnection();
-            statement = con.prepareStatement("INSERT INTO users(email, name, password) VALUES(?, ?, ?)");
+            connect = database_connection.Tryconnection();
+            statement = connect.prepareStatement("INSERT INTO users(email, name, password) VALUES(?, ?, ?)");
             statement.setString(1, email);
             statement.setString(2, name);
             statement.setString(3, password);
             statement.executeQuery();
-            con.close();
+            connect.close();
             statement.close();
         }catch(Exception e){
             System.out.println("Error Adding user");
@@ -29,13 +29,13 @@ public class users {
 
     public void delete_user(int id) {
         boolean Exist = false;
-        if (e.Exist("users", id)) {
+        if (exist.Exist("users", id)) {
             try{
-                statement = con.prepareStatement("DELETE FROM users WHERE id = ?");
+                connect = database_connection.Tryconnection();
+                statement = connect.prepareStatement("DELETE FROM users WHERE id = ?");
                 statement.setInt(1, id);
                 statement.executeUpdate();
-                statement.close();
-                con.close();
+                connect.close();
             } catch (Exception e) {
                 System.out.println("Error connecting");
             }
@@ -46,15 +46,15 @@ public class users {
     }
 
     public void Update_user(int id, String email, String password) {
-            if (e.Exist("users", id)) {
+            if (exist.Exist("users", id)) {
                 try{
-                    statement = con.prepareStatement("UPDATE users SET email = ? AND password = ? WHERE id = ?");
+                    connect = database_connection.Tryconnection();
+                    statement = connect.prepareStatement("UPDATE users SET email = ? AND password = ? WHERE id = ?");
                     statement.setString(1, email);
                     statement.setString(2, password);
                     statement.setInt(3, id);
                     statement.executeUpdate();
-                    statement.close();
-                    con.close();
+                    connect.close();
                 } catch (Exception e) {
                     System.out.println("Error connecting");
                 }
@@ -64,24 +64,15 @@ public class users {
 
     }
 
-    public int getuserID(String name, String password){
-        String Uname = "";
-        String Upassword = "";
+    public int GetUserByID(String name){
         int id = 0;
         try {
-            con = u.Tryconnection();
-            statement = con.prepareStatement("Select * FROM users");
+            connect = database_connection.Tryconnection();
+            statement = connect.prepareStatement("Select * FROM users WHERE name = " + name );
             result = statement.executeQuery();
-            while (result.next()) {
-                Uname = result.getString("name");
-                Upassword = result.getString("password");
-                if (Uname.equalsIgnoreCase(name) && Upassword.equals(password)) {
-                    id = result.getInt("id");
-                }
-            }
-
+            id = result.getInt("id");
         }catch(Exception e){
-            System.out.println("Error getting user Id");
+            System.out.println("Error getting user Id " + e);
         }
         return id;
     }
