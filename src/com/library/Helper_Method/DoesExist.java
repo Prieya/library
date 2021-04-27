@@ -17,7 +17,8 @@ public class DoesExist {
         boolean exist = false;
         try{
             connect = database.Tryconnection();
-            statement = connect.prepareStatement("SELECT * FROM " + table +" WHERE id = " + id);
+            statement = connect.prepareStatement("SELECT * FROM " + table +" WHERE id = ?");
+            statement.setInt(1, id);
             result = statement.executeQuery();
             if(result.next()){
                 exist = true;

@@ -6,10 +6,12 @@ public class Main {
 
     public static void main(String[] args) {
 	Books book = new Books();
-	Author author = new Author();
 	genre g = new genre();
-	book_genre genre = new book_genre();
-	generalDeleteBook(book);
+        Scanner k = new Scanner(System.in);
+        System.out.println("Enter The name of the genre that need to be delete");
+        int id = k.nextInt();
+	g.DeleteGenre(id);
+
     }
 
     public static void General_book(Books book, Author author, genre g, book_genre b){
@@ -22,22 +24,20 @@ public class Main {
         String bookdiscription= k.nextLine();
         System.out.println("Enter the author name of the Book");
         String bookauthor = k.nextLine();
-        System.out.println("Enter the book genre.");
-        String bookGenre= k.nextLine();
+        System.out.println("Enter the ID of the book genre.");
+        int bookGenre= k.nextInt();
         System.out.println("Enter the total amount of page in the Book");
         int bookpages= k.nextInt();
 
         author = new Author();
         author.addAuthor(bookauthor);
 
-        g = new genre();
-        g.AddGenre(bookGenre);
 
         book = new Books();
         book.addBook(bookTitle, bookISBN, bookdiscription, bookpages, author.getauthorByID(bookauthor));
 
         b = new book_genre();
-        b.Book_Genre(book.getBookID(bookTitle), g.getGenrebyID(bookGenre));
+        b.Book_Genre(book.getBookID(bookTitle), bookGenre);
     }
 
     public static void generalCheckout(Books book, users u, checkout c){
@@ -85,10 +85,11 @@ public class Main {
         String bookISBN= k.nextLine();
 
         int bookId = book.getBookID(bookTitle);
-        book.deleteBook(bookId);
         book_genre b = new book_genre();
         checkout check = new checkout();
         b.DeleteBookGenre(bookId);
         check.Delete_checkoutBook(bookId);
+        book.deleteBook(bookId);
+
     }
 }

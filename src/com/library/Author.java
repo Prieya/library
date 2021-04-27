@@ -62,7 +62,8 @@ public class Author {
         int AuthorID  = 0;
         try{
             connection = database_connection.Tryconnection();
-            statement = connection.prepareStatement("SELECT * FROM author WHERE name = " + name);
+            statement = connection.prepareStatement("SELECT * FROM author WHERE name = ?");
+            statement.setString(1, name);
             result = statement.executeQuery();
             AuthorID = result.getInt("id");
         }catch(Exception e){

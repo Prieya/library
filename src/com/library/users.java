@@ -68,7 +68,8 @@ public class users {
         int id = 0;
         try {
             connect = database_connection.Tryconnection();
-            statement = connect.prepareStatement("Select * FROM users WHERE name = " + name );
+            statement = connect.prepareStatement("Select * FROM users WHERE name = ?");
+            statement.setString(1, name);
             result = statement.executeQuery();
             id = result.getInt("id");
         }catch(Exception e){

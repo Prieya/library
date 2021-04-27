@@ -68,7 +68,8 @@ public class book_genre {
         int ID = 0;
         try{
             connect = database.Tryconnection();
-            statement = connect.prepareStatement("SELECT * FROM book_genre WHERE genre_id = " + genreId);
+            statement = connect.prepareStatement("SELECT * FROM book_genre WHERE genre_id = ?");
+            statement.setInt(1, genreId);
             result = statement.executeQuery();
             ID = result.getInt("id");
         }catch(Exception e){

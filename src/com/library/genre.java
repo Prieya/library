@@ -1,8 +1,11 @@
 package com.library;
 
+import com.library.Helper_Method.DoesExist;
+
 import java.sql.*;
 
 public class genre {
+    private DoesExist exist = new DoesExist();
     private TryConnect database_connection = new TryConnect();
     private Connection connect = null;
     private PreparedStatement statement = null;
@@ -47,31 +50,19 @@ public class genre {
         }
     }
 
-    public void DeleteGenre(String name){
-        boolean Genre_Exist = false;
-        try{
-            connect = database_connection.Tryconnection();
-            statement = connect.prepareStatement("SELECT * FROM genre");
-            result = statement.executeQuery();
-            while(result.next()){
-                String Genre_Type = result.getString("name");
-                if(Genre_Type.equalsIgnoreCase(name)){
-                    Genre_Exist = true;
-                }
-                statement.close();
-                result.close();
-            }
-            if(Genre_Exist){
-                statement = connect.prepareStatement("DELETE FROM genre WHERE name = ?");
-                statement.setString(1,name);
+    public void DeleteGenre(int id){
+        if(exist.Exist("genre", id)) {
+            try {
+                connect = database_connection.Tryconnection();
+                statement = connect.prepareStatement("DELETE FROM genre WHERE id = ?");
+                statement.setInt(1, id);
                 statement.executeUpdate();
                 connect.close();
-            }else{
-                System.out.println("That name can not be found in genre");
+            } catch (Exception e) {
+                System.out.println("Error Deleting from genre" + e);
             }
-        }catch(Exception e){
-            System.out.println("Error Deleting from genre");
         }
+
     }
 
     public int getGenrebyID(String name){
@@ -79,12 +70,13 @@ public class genre {
         int GenreID = 0;
         try {
             connect = database_connection.Tryconnection();
-            statement = connect.prepareStatement("SELECT * FROM genre WHERE name = " + name);
+            statement = connect.prepareStatement("SELECT * FROM genre WHERE name = ?");
+            statement.setString(1, name);
             result = statement.executeQuery();
             GenreID = result.getInt("id");
 
         }catch(Exception e){
-            System.out.println("Eroor in gteGenrebyId: " + e);
+            System.out.println("Erorr in gteGenrebyId: " + e);
         }
         return GenreID;
     }

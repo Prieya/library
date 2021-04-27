@@ -76,15 +76,19 @@ public class Books {
     }
 
     public int getBookID(String title){
+        String BookTitle = "";
         int BookId = 0;
         try{
             connection = database.Tryconnection();
-            statement = connection.prepareStatement("SELECT * FROM book WHERE title = " + title);
+            statement = connection.prepareStatement("SELECT * FROM book WHERE title = ?");
+            statement.setString(1, title);
             result = statement.executeQuery();
-            BookId = result.getInt("id");
-
-        }catch(SQLException e){
-            System.out.println("Error getting book Id " + e);
+            if(result.next()){
+                BookId = result.getInt("id");
+            }
+            connection.close();
+        }catch(Exception e){
+            System.out.println("Error search for id in getBookID" + e);
         }
         return BookId;
     }

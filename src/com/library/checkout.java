@@ -33,7 +33,8 @@ public class checkout {
         if (exist.Exist("checkout", id)) {
             try{
                 connect = Database_connect.Tryconnection();
-                statement = connect.prepareStatement("DELETE FROM checkout where id = "+ id);
+                statement = connect.prepareStatement("DELETE FROM checkout where id = ?");
+                statement.setInt(1, id);
                 statement.executeUpdate();
                 connect.close();
             }catch(Exception e){
@@ -69,7 +70,8 @@ public class checkout {
         int ID = 0;
         try{
             connect = Database_connect.Tryconnection();
-            statement = connect.prepareStatement("SELECT * FROM WHERE bookId = " + bookID);
+            statement = connect.prepareStatement("SELECT * FROM WHERE bookId = ?");
+            statement.setInt(1, bookID);
             set = statement.executeQuery();
              ID = set.getInt("id");
         }catch(Exception e){
