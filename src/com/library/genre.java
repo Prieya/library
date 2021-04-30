@@ -22,6 +22,7 @@ public class genre {
         }catch(Exception e){
             System.out.println("Error add to genre " + e);
         }
+        System.out.println("ID for genre = " + getGenrebyID(name));
 
     }
     public void UpdateGenre(int id, String name){
@@ -73,8 +74,10 @@ public class genre {
             statement = connect.prepareStatement("SELECT * FROM genre WHERE name = ?");
             statement.setString(1, name);
             result = statement.executeQuery();
-            GenreID = result.getInt("id");
-
+            if(result.next()){
+                GenreID = result.getInt("id");
+            }
+            connect.close();
         }catch(Exception e){
             System.out.println("Erorr in gteGenrebyId: " + e);
         }

@@ -22,6 +22,7 @@ public class Author {
         }catch(Exception e){
             System.out.println("Error adding author " + e);
         }
+        System.out.println("ID of Author = " + getauthorByID(name));
     }
 
     public void UpdateAuthor(int id, String name){
@@ -65,7 +66,10 @@ public class Author {
             statement = connection.prepareStatement("SELECT * FROM author WHERE name = ?");
             statement.setString(1, name);
             result = statement.executeQuery();
-            AuthorID = result.getInt("id");
+            if(result.next()){
+                AuthorID = result.getInt("id");
+            }
+            connection.close();
         }catch(Exception e){
             System.out.println("Error getting ID from author");
         }

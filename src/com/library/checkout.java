@@ -27,6 +27,7 @@ public class checkout {
         }catch(Exception e){
             System.out.println("Error adding checkout");
         }
+        System.out.println("ID of checkout = " + GetCheckoutByID(bookId));
     }
 
     public void Delete_checkoutBook(int id){
@@ -73,7 +74,10 @@ public class checkout {
             statement = connect.prepareStatement("SELECT * FROM WHERE bookId = ?");
             statement.setInt(1, bookID);
             set = statement.executeQuery();
-             ID = set.getInt("id");
+            if(set.next()) {
+                ID = set.getInt("id");
+            }
+            connect.close();
         }catch(Exception e){
             System.out.println("error int GetCheckoutById");
         }

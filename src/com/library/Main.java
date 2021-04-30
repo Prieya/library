@@ -7,14 +7,13 @@ public class Main {
     public static void main(String[] args) {
 	Books book = new Books();
 	genre g = new genre();
-        Scanner k = new Scanner(System.in);
-        System.out.println("Enter The name of the genre that need to be delete");
-        int id = k.nextInt();
-	g.DeleteGenre(id);
+    Author a = new Author();
+    book_genre b = new book_genre();
+    General_book(book, a, b);
 
     }
 
-    public static void General_book(Books book, Author author, genre g, book_genre b){
+    public static void General_book(Books book, Author author, book_genre b){
         Scanner k = new Scanner(System.in);
         System.out.println("Enter The title of the Book.");
         String bookTitle = k.nextLine();
@@ -58,6 +57,8 @@ public class Main {
         u.user_adding(useremail, Username, userpassword);
         c = new checkout();
         c.adding_checkout(book.getBookID(bookTitle), u.GetUserByID(Username));
+        book_genre Bgenre = new book_genre();
+
     }
 
     public static void MembergeneralCheckout(Books book, users u, checkout c){

@@ -25,6 +25,7 @@ public class users {
         }catch(Exception e){
             System.out.println("Error Adding user");
         }
+        System.out.println("Id of user = " + GetUserByID(name));
     }
 
     public void delete_user(int id) {
@@ -71,7 +72,10 @@ public class users {
             statement = connect.prepareStatement("Select * FROM users WHERE name = ?");
             statement.setString(1, name);
             result = statement.executeQuery();
-            id = result.getInt("id");
+            if(result.next()){
+                id = result.getInt("id");
+            }
+            connect.close();
         }catch(Exception e){
             System.out.println("Error getting user Id " + e);
         }

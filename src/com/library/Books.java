@@ -30,6 +30,7 @@ public class Books {
         }catch (SQLException e){
             System.out.println("Error adding to Book" + e);
         }
+        System.out.println("ID of book = " + getBookID(title));
     }
 
 

@@ -26,6 +26,7 @@ public class book_genre {
         }catch(Exception e){
             System.out.println("Error add to book_genre " + e);
         }
+        System.out.println("ID of Book_Genre = " + GetBook_GenreByIDB(BId));
 
     }
     public void UpdateBookGenre(int id, int BookId, int GenreId){
@@ -71,7 +72,10 @@ public class book_genre {
             statement = connect.prepareStatement("SELECT * FROM book_genre WHERE genre_id = ?");
             statement.setInt(1, genreId);
             result = statement.executeQuery();
-            ID = result.getInt("id");
+            if(result.next()){
+                ID = result.getInt("id");
+            }
+            connect.close();
         }catch(Exception e){
             System.out.println("Error in GETGenreByID: " + e);
         }
@@ -81,9 +85,12 @@ public class book_genre {
         int ID = 0;
         try{
             connect = database.Tryconnection();
-            statement = connect.prepareStatement("SELECT * FROM book_genre WHERE genre_id = " + bookID);
+            statement = connect.prepareStatement("SELECT * FROM book_genre WHERE book_id = " + bookID);
             result = statement.executeQuery();
-            ID = result.getInt("id");
+            if(result.next()){
+                ID = result.getInt("id");
+            }
+            connect.close();
         }catch(Exception e){
             System.out.println("Error in GETGenreByID: " + e);
         }
